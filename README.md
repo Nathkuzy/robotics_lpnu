@@ -14,44 +14,7 @@ Hands-on labs for learning ROS2 and robotics simulation with Gazebo.
 **Don't have Ubuntu 24.04?** See the [Installation Guide](docs/INSTALLATION_GUIDE.md) for setup instructions.
 
 ---
-
-## Setup
-
-### 1. Install Docker
-
-```bash
-# Install prerequisites
-sudo apt-get update
-sudo apt-get install -y git ca-certificates curl gnupg lsb-release
-
-# Add Docker repository
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-# Install Docker
-sudo apt-get update
-sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-# Add user to docker group
-sudo usermod -aG docker $USER
-newgrp docker
-
-# Verify installation
-docker run hello-world
-```
-
-#### Nvidia GPU Support (Optional)
-
-For better Gazebo performance with NVIDIA GPUs:
-
-```bash
-sudo apt-get install -y nvidia-container-toolkit
-sudo nvidia-ctk runtime configure --runtime=docker
-sudo systemctl restart docker
-```
-
-### 2. Clone Repository
+### 1. Clone Repository
 
 ```bash
 cd ~
@@ -59,7 +22,7 @@ git clone https://github.com/RybOlya/robotics_lpnu.git
 cd robotics_lpnu
 ```
 
-### 3. Build Docker Image
+### 2. Build Docker Image
 
 ```bash
 ./scripts/cmd build-docker
@@ -67,7 +30,7 @@ cd robotics_lpnu
 
 This takes 10-15 minutes on first run.
 
-### 4. Run Container
+### 3. Run Container
 
 ```bash
 ./scripts/cmd run
