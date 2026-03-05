@@ -1,3 +1,0 @@
-[console_scripts]
-lidar_subscriber = lab2.lidar_subscriber:main
-robot_controller = lab2.robot_controller:main
