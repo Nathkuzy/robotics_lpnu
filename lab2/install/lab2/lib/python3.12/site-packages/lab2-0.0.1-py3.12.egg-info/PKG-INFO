@@ -1,0 +1,8 @@
+Metadata-Version: 2.1
+Name: lab2
+Version: 0.0.1
+Summary: Lab 2: ROS2 Integration with Gazebo
+Maintainer: Your Name
+Maintainer-email: your.email@lpnu.ua
+License: Apache-2.0
+License-File: LICENSE

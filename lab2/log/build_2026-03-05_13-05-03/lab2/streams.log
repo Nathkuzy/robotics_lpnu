@@ -1,0 +1,48 @@
+[0.685s] Invoking command in '/opt/ws/src/code/lab2': PYTHONPATH=/opt/ws/src/code/lab2/build/lab2/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/opt/ws/src/code/lab2/install/lab2/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/lab2 build --build-base /opt/ws/src/code/lab2/build/lab2/build install --record /opt/ws/src/code/lab2/build/lab2/install.log --single-version-externally-managed install_data
+[0.853s] running egg_info
+[0.853s] creating build/lab2/lab2.egg-info
+[0.914s] writing build/lab2/lab2.egg-info/PKG-INFO
+[0.914s] writing dependency_links to build/lab2/lab2.egg-info/dependency_links.txt
+[0.914s] writing entry points to build/lab2/lab2.egg-info/entry_points.txt
+[0.914s] writing requirements to build/lab2/lab2.egg-info/requires.txt
+[0.915s] writing top-level names to build/lab2/lab2.egg-info/top_level.txt
+[0.915s] writing manifest file 'build/lab2/lab2.egg-info/SOURCES.txt'
+[0.936s] reading manifest file 'build/lab2/lab2.egg-info/SOURCES.txt'
+[0.936s] adding license file 'LICENSE'
+[0.937s] writing manifest file 'build/lab2/lab2.egg-info/SOURCES.txt'
+[0.937s] running build
+[0.937s] running build_py
+[0.937s] creating /opt/ws/src/code/lab2/build/lab2/build
+[0.937s] creating /opt/ws/src/code/lab2/build/lab2/build/lib
+[0.937s] creating /opt/ws/src/code/lab2/build/lab2/build/lib/lab2
+[0.938s] copying lab2/robot_controller.py -> /opt/ws/src/code/lab2/build/lab2/build/lib/lab2
+[0.938s] copying lab2/__init__.py -> /opt/ws/src/code/lab2/build/lab2/build/lib/lab2
+[0.938s] copying lab2/lidar_subscriber.py -> /opt/ws/src/code/lab2/build/lab2/build/lib/lab2
+[0.938s] running install
+[0.943s] running install_lib
+[0.954s] creating /opt/ws/src/code/lab2/install/lab2/lib/python3.12/site-packages/lab2
+[0.954s] copying /opt/ws/src/code/lab2/build/lab2/build/lib/lab2/robot_controller.py -> /opt/ws/src/code/lab2/install/lab2/lib/python3.12/site-packages/lab2
+[0.954s] copying /opt/ws/src/code/lab2/build/lab2/build/lib/lab2/__init__.py -> /opt/ws/src/code/lab2/install/lab2/lib/python3.12/site-packages/lab2
+[0.954s] copying /opt/ws/src/code/lab2/build/lab2/build/lib/lab2/lidar_subscriber.py -> /opt/ws/src/code/lab2/install/lab2/lib/python3.12/site-packages/lab2
+[0.955s] byte-compiling /opt/ws/src/code/lab2/install/lab2/lib/python3.12/site-packages/lab2/robot_controller.py to robot_controller.cpython-312.pyc
+[0.956s] byte-compiling /opt/ws/src/code/lab2/install/lab2/lib/python3.12/site-packages/lab2/__init__.py to __init__.cpython-312.pyc
+[0.956s] byte-compiling /opt/ws/src/code/lab2/install/lab2/lib/python3.12/site-packages/lab2/lidar_subscriber.py to lidar_subscriber.cpython-312.pyc
+[0.956s] running install_data
+[0.956s] creating /opt/ws/src/code/lab2/install/lab2/share/ament_index
+[0.957s] creating /opt/ws/src/code/lab2/install/lab2/share/ament_index/resource_index
+[0.957s] creating /opt/ws/src/code/lab2/install/lab2/share/ament_index/resource_index/packages
+[0.957s] copying resource/lab2 -> /opt/ws/src/code/lab2/install/lab2/share/ament_index/resource_index/packages
+[0.957s] copying package.xml -> /opt/ws/src/code/lab2/install/lab2/share/lab2
+[0.957s] creating /opt/ws/src/code/lab2/install/lab2/share/lab2/launch
+[0.957s] copying launch/gazebo_ros2.launch.py -> /opt/ws/src/code/lab2/install/lab2/share/lab2/launch
+[0.957s] creating /opt/ws/src/code/lab2/install/lab2/share/lab2/worlds
+[0.957s] copying worlds/robot.sdf -> /opt/ws/src/code/lab2/install/lab2/share/lab2/worlds
+[0.958s] creating /opt/ws/src/code/lab2/install/lab2/share/lab2/config
+[0.958s] copying config/robot.rviz -> /opt/ws/src/code/lab2/install/lab2/share/lab2/config
+[0.958s] running install_egg_info
+[0.970s] Copying build/lab2/lab2.egg-info to /opt/ws/src/code/lab2/install/lab2/lib/python3.12/site-packages/lab2-0.0.1-py3.12.egg-info
+[0.970s] running install_scripts
+[1.008s] Installing lidar_subscriber script to /opt/ws/src/code/lab2/install/lab2/lib/lab2
+[1.008s] Installing robot_controller script to /opt/ws/src/code/lab2/install/lab2/lib/lab2
+[1.008s] writing list of installed files to '/opt/ws/src/code/lab2/build/lab2/install.log'
+[1.033s] Invoked command in '/opt/ws/src/code/lab2' returned '0': PYTHONPATH=/opt/ws/src/code/lab2/build/lab2/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/opt/ws/src/code/lab2/install/lab2/lib/python3.12/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/lab2 build --build-base /opt/ws/src/code/lab2/build/lab2/build install --record /opt/ws/src/code/lab2/build/lab2/install.log --single-version-externally-managed install_data
