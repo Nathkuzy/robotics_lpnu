@@ -1,16 +1,13 @@
-"""Dead reckoning - STUDENT TASK.
-
-Integrate /cmd_vel to estimate pose; compare with Gazebo ground truth (/odom).
-
-Reference: https://www.roboticsbook.org/S52_diffdrive_actions.html
 """
+Dead reckoning node: integrates velocity commands into a pose estimate.
+"""
+
 import math
 
 import rclpy
 from rclpy.node import Node
-from geometry_msgs.msg import TwistStamped
+from geometry_msgs.msg import TwistStamped, PoseStamped
 from nav_msgs.msg import Odometry, Path
-from geometry_msgs.msg import PoseStamped
 
 
 class DeadReckoningNode(Node):
@@ -23,36 +20,101 @@ class DeadReckoningNode(Node):
         self.declare_parameter("frame_id", "odom")
         self.declare_parameter("max_poses", 2000)
 
-        cmd_topic = self.get_parameter("cmd_vel_topic").value
-        gt_topic = self.get_parameter("ground_truth_topic").value
-        path_topic = self.get_parameter("path_dr_topic").value
+        self.cmd_topic = self.get_parameter("cmd_vel_topic").value
+        self.gt_topic = self.get_parameter("ground_truth_topic").value
+        self.path_topic = self.get_parameter("path_dr_topic").value
         self.frame_id = self.get_parameter("frame_id").value
         self.max_poses = int(self.get_parameter("max_poses").value)
 
-        self.create_subscription(TwistStamped, cmd_topic, self.cmd_callback, 10)
-        self.create_subscription(Odometry, gt_topic, self.gt_callback, 10)
-        self.pub_path = self.create_publisher(Path, path_topic, 10)
+        self.create_subscription(TwistStamped, self.cmd_topic, self._on_cmd, 10)
+        self.create_subscription(Odometry, self.gt_topic, self._on_gt, 10)
+        self.path_pub = self.create_publisher(Path, self.path_topic, 10)
 
-        # TODO: add state variables (pose, time, ground truth)
-        self.path_msg = Path()
-        self.path_msg.header.frame_id = self.frame_id
+        self._pose = [0.0, 0.0, 0.0] 
+        self._last_time = None
 
-    def cmd_callback(self, msg: TwistStamped):
-        # TODO: integrate v, w to update pose; publish path
-        pass
+        # Ground truth storage
+        self._gt_pose = None
 
-    def gt_callback(self, msg: Odometry):
-        # TODO: store ground truth for comparison
-        pass
+        # Path message
+        self._path = Path()
+        self._path.header.frame_id = self.frame_id
+
+    def _on_cmd(self, msg: TwistStamped):
+        now = self.get_clock().now().nanoseconds * 1e-9
+
+        if self._last_time is None:
+            self._last_time = now
+            return
+
+        dt = now - self._last_time
+        self._last_time = now
+
+        v = msg.twist.linear.x
+        w = msg.twist.angular.z
+
+        self._integrate_motion(v, w, dt)
+        self._publish_path(msg.header.stamp)
+
+    def _on_gt(self, msg: Odometry):
+        pos = msg.pose.pose.position
+        ori = msg.pose.pose.orientation
+
+        yaw = math.atan2(
+            2.0 * (ori.w * ori.z + ori.x * ori.y),
+            1.0 - 2.0 * (ori.y * ori.y + ori.z * ori.z),
+        )
+
+        self._gt_pose = (pos.x, pos.y, yaw)
+
+    def _integrate_motion(self, v, w, dt):
+        x, y, theta = self._pose
+
+        x += v * math.cos(theta) * dt
+        y += v * math.sin(theta) * dt
+        theta += w * dt
+
+        # Normalize angle
+        theta = math.atan2(math.sin(theta), math.cos(theta))
+
+        self._pose = [x, y, theta]
+
+    def _publish_path(self, stamp):
+        x, y, theta = self._pose
+
+        pose_msg = PoseStamped()
+        pose_msg.header.stamp = stamp
+        pose_msg.header.frame_id = self.frame_id
+
+        pose_msg.pose.position.x = x
+        pose_msg.pose.position.y = y
+
+        qz, qw = self._yaw_to_quaternion(theta)
+        pose_msg.pose.orientation.z = qz
+        pose_msg.pose.orientation.w = qw
+
+        self._path.header.stamp = stamp
+        self._path.poses.append(pose_msg)
+
+        if len(self._path.poses) > self.max_poses:
+            self._path.poses.pop(0)
+
+        self.path_pub.publish(self._path)
+
+    @staticmethod
+    def _yaw_to_quaternion(yaw):
+        return math.sin(yaw / 2.0), math.cos(yaw / 2.0)
 
 
 def main(args=None):
     rclpy.init(args=args)
     node = DeadReckoningNode()
+
     try:
         rclpy.spin(node)
     except KeyboardInterrupt:
         pass
+
     node.destroy_node()
     rclpy.shutdown()
 
