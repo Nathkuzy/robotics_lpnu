@@ -34,6 +34,7 @@ RUN apt update && apt install -y --no-install-recommends \
 
 ENV NVIDIA_VISIBLE_DEVICES=all
 ENV NVIDIA_DRIVER_CAPABILITIES=graphics,utility,compute
+ENV TURTLEBOT3_MODEL=burger
 
 ########################################################################
 #### BUild tools and common dependencies
@@ -70,6 +71,8 @@ RUN apt update && apt install -y --no-install-recommends \
     ros-${ROS_DISTRO}-turtlesim \
     ros-${ROS_DISTRO}-demo-nodes-cpp \
     ros-${ROS_DISTRO}-demo-nodes-py \
+    ros-${ROS_DISTRO}-turtlebot3 \
+    ros-${ROS_DISTRO}-turtlebot3-simulations \
     && rm -rf /var/lib/apt/lists/*
 
 # install packages
