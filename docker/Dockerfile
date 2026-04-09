@@ -73,6 +73,10 @@ RUN apt update && apt install -y --no-install-recommends \
     ros-${ROS_DISTRO}-demo-nodes-py \
     ros-${ROS_DISTRO}-turtlebot3 \
     ros-${ROS_DISTRO}-turtlebot3-simulations \
+    ros-${ROS_DISTRO}-nav2-bringup \
+    ros-${ROS_DISTRO}-joint-state-publisher-gui \
+    ros-${ROS_DISTRO}-ros2-control \
+    ros-${ROS_DISTRO}-ros2-controllers \
     && rm -rf /var/lib/apt/lists/*
 
 # install packages
@@ -97,7 +101,6 @@ RUN apt update && apt install -q -y --no-install-recommends \
     python3-flake8-docstrings \
     python3-flake8-import-order \
     python3-flake8-quotes \
-    python3-pytest-repeat \
     python3-pytest-rerunfailures \
     python3-requests \
     nlohmann-json3-dev \

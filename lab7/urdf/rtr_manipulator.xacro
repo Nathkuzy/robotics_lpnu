@@ -1,0 +1,138 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="rtr_manipulator">
+  <!-- RTR: Revolute (base yaw) – Prismatic (vertical) – Revolute (elbow). -->
+  <xacro:property name="l2" value="0.9"/>
+  <xacro:property name="l3" value="1.0"/>
+  <xacro:property name="width" value="0.08"/>
+
+  <material name="blue"><color rgba="0 0 1 1"/></material>
+  <material name="red"><color rgba="1 0 0 1"/></material>
+  <material name="green"><color rgba="0 1 0 1"/></material>
+  <material name="grey"><color rgba="0.7 0.7 0.7 1"/></material>
+
+  <link name="world"/>
+  <!-- Origins chosen so joint variables match the paper FK (no extra vertical offset in theta_2). -->
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0.05" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.12" length="0.1"/></geometry>
+      <material name="grey"/>
+    </visual>
+  </link>
+  <joint name="world_to_base" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="link_yaw">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.15" rpy="0 0 0"/>
+      <geometry><cylinder radius="0.06" length="0.3"/></geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  <joint name="joint_theta1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link_yaw"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="-3.14159" upper="3.14159" effort="100" velocity="1.0"/>
+  </joint>
+
+  <link name="link_carriage">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="1"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><box size="${width} ${width} ${width}"/></geometry>
+      <material name="green"/>
+    </visual>
+  </link>
+  <joint name="joint_theta2" type="prismatic">
+    <parent link="link_yaw"/>
+    <child link="link_carriage"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit lower="0.0" upper="2.0" effort="200" velocity="0.25"/>
+  </joint>
+
+  <link name="link_upper">
+    <inertial>
+      <origin xyz="${l2/2} 0 0" rpy="0 0 0"/>
+      <mass value="20"/>
+      <inertia ixx="0.1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+    <visual>
+      <origin xyz="${l2/2} 0 0" rpy="0 0 0"/>
+      <geometry><box size="${l2} ${width} ${width}"/></geometry>
+      <material name="red"/>
+    </visual>
+  </link>
+  <joint name="fixed_carriage_upper" type="fixed">
+    <parent link="link_carriage"/>
+    <child link="link_upper"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="link_forearm">
+    <inertial>
+      <origin xyz="${l3/2} 0 0" rpy="0 0 0"/>
+      <mass value="20"/>
+      <inertia ixx="0.1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+    </inertial>
+    <visual>
+      <origin xyz="${l3/2} 0 0" rpy="0 0 0"/>
+      <geometry><box size="${l3} ${width} ${width}"/></geometry>
+      <material name="blue"/>
+    </visual>
+  </link>
+  <joint name="joint_theta3" type="revolute">
+    <parent link="link_upper"/>
+    <child link="link_forearm"/>
+    <origin xyz="${l2} 0 0" rpy="0 0 0"/>
+    <axis xyz="0 1 0"/>
+    <limit lower="-3.14159" upper="3.14159" effort="100" velocity="1.0"/>
+  </joint>
+
+  <link name="tool0"/>
+  <joint name="wrist_to_tool0" type="fixed">
+    <parent link="link_forearm"/>
+    <child link="tool0"/>
+    <origin xyz="${l3} 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Ignored by joint_state_publisher_gui / classic chain; required for ros2_control bringup. -->
+  <ros2_control name="RTRMock" type="system">
+    <hardware>
+      <plugin>mock_components/GenericSystem</plugin>
+      <param name="fake_sensor_commands">false</param>
+    </hardware>
+    <joint name="joint_theta1">
+      <command_interface name="position"/>
+      <state_interface name="position">
+        <param name="initial_value">0.0</param>
+      </state_interface>
+    </joint>
+    <joint name="joint_theta2">
+      <command_interface name="position"/>
+      <state_interface name="position">
+        <param name="initial_value">0.5</param>
+      </state_interface>
+    </joint>
+    <joint name="joint_theta3">
+      <command_interface name="position"/>
+      <state_interface name="position">
+        <param name="initial_value">0.2</param>
+      </state_interface>
+    </joint>
+  </ros2_control>
+</robot>
