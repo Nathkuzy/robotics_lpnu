@@ -98,7 +98,7 @@ controller_server:
       min_vel_y: 0.0
       max_vel_x: 1.2
       max_vel_y: 0.0
-      max_vel_theta: 2.5
+      max_vel_theta: 3.0
       min_speed_xy: 0.0
       max_speed_xy: 1.2
       min_speed_theta: 0.0
@@ -152,13 +152,13 @@ local_costmap:
       rolling_window: true
       width: 3
       height: 3
-      resolution: 0.2
+      resolution: 0.01
       robot_radius: 0.1
       plugins: ["voxel_layer", "inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0
-        inflation_radius: 1.0
+        inflation_radius: 0.8
       voxel_layer:
         plugin: "nav2_costmap_2d::VoxelLayer"
         enabled: True
@@ -193,7 +193,7 @@ global_costmap:
       robot_base_frame: base_link
       transform_tolerance: 1.0
       robot_radius: 0.1
-      resolution: 0.2
+      resolution: 0.01
       track_unknown_space: true
       plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
       obstacle_layer:
@@ -216,7 +216,7 @@ global_costmap:
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 10.0
-        inflation_radius: 1.0
+        inflation_radius: 0.8
       always_send_full_costmap: True
 
 # The yaml_filename does not need to be specified since it going to be set by defaults in launch.
